@@ -1,4 +1,4 @@
-#COMO RODAR 
+# COMO RODAR 
 
 apos criar o ambiente virtual 
 .\venv\Scripts\activate
