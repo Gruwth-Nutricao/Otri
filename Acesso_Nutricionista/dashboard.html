@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Nutricionista | OTRI</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        .chat-layout {
+            display: flex;
+            gap: 20px;
+            height: 75vh;
+        }
+        .chat-container {
+            flex: 2; /* Chat ocupa 2/3 do espaço */
+            display: flex;
+            flex-direction: column;
+        }
+        .plan-manager {
+            flex: 1; /* Gerenciador de plano ocupa 1/3 */
+            background-color: var(--card-background);
+            border-radius: 12px;
+            box-shadow: var(--soft-shadow);
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .plan-manager h3 {
+            margin-top: 0;
+            border-bottom: 2px solid var(--primary-green);
+            padding-bottom: 10px;
+        }
+        #form-add-alimento {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        #form-add-alimento select, #form-add-alimento input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box; /* Importante */
+        }
+        #busca-resultados {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        #busca-resultados div {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        #busca-resultados div:hover {
+            background-color: var(--background-color);
+        }
+        #busca-resultados div:last-child {
+            border-bottom: none;
+        }
+        #plano-atual-lista {
+            list-style: none;
+            padding: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        #plano-atual-lista li {
+            background-color: var(--background-color);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+        #plano-atual-lista li strong {
+            color: var(--primary-blue);
+            text-transform: capitalize;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-seedling logo-icon"></i>
+                <h1 class="logo-text">OTRI</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-target="dashboard">
+                    <i class="fas fa-home nav-icon"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-target="new-client">
+                    <i class="fas fa-user-plus nav-icon"></i> Cadastrar Cliente
+                </a>
+                <a href="#" class="nav-item" data-target="bot-config">
+                    <i class="fas fa-robot nav-icon"></i> Configuração do Bot
+                </a>
+                <a href="#" class="nav-item" data-target="debug">
+                    <i class="fas fa-bug nav-icon"></i> Tela de Debug
+                </a>
+                <a href="#" class="nav-item" data-target="profile">
+                    <i class="fas fa-user-circle nav-icon"></i> Perfil
+                </a>
+            </nav>
+            <div class="sidebar-profile">
+                <img src="https://via.placeholder.com/60" alt="Foto do perfil" class="profile-pic">
+                <span>Dr(a). [Seu Nome]</span>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            
+            <section id="dashboard" class="content-section active">
+                <header class="section-header">
+                    <h2>Dashboard</h2>
+                    <div class="header-actions">
+                        <div class="search-bar">
+                            <input type="text" placeholder="Pesquisar cliente..." class="search-input">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <button class="btn-primary" data-target="new-client">
+                            <i class="fas fa-user-plus"></i> Cadastrar Cliente
+                        </button>
+                    </div>
+                </header>
+
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <h3>Clientes Ativos</h3>
+                        <div class="stat-content">
+                            <span class="stat-number">0</span>
+                            <i class="fas fa-users-line stat-icon-md green"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Vagas Disponíveis</h3>
+                        <div class="stat-content">
+                            <span class="stat-number">...</span>
+                            <i class="fas fa-user-plus stat-icon-md blue"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Chats Ativos</h3>
+                        <div class="stat-content">
+                            <span class="stat-number">...</span>
+                            <i class="fas fa-comments stat-icon-md purple"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="client-list-container">
+                    <h3>Meus Clientes</h3>
+                    <ul class="client-list">
+                        </ul>
+                </div>
+
+            </section>
+
+            <section id="new-client" class="content-section">
+                <header class="section-header">
+                    <h2>Cadastrar Novo Cliente</h2>
+                </header>
+                <div class="form-container">
+                    <form class="client-form" id="form-new-client">
+                        <h3>Dados Pessoais e Acesso</h3>
+                        <div class="form-group">
+                            <label for="nome-cliente">Nome Completo</label>
+                            <input type="text" id="nome-cliente" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email-cliente">Email</label>
+                            <input type="email" id="email-cliente" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="senha-cliente">Senha (provisória)</label>
+                            <input type="password" id="senha-cliente" required>
+                        </div>
+
+                        <h3>Dados Antropométricos</h3>
+                        <div class="form-group">
+                            <label for="idade-cliente">Idade</label>
+                            <input type="number" id="idade-cliente" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sexo-cliente">Sexo</label>
+                            <select id="sexo-cliente" required>
+                                <option value="F">Feminino</option>
+                                <option value="M">Masculino</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="peso-cliente">Peso (kg)</label>
+                            <input type="number" step="0.1" id="peso-cliente" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="altura-cliente">Altura (cm)</label>
+                            <input type="number" id="altura-cliente" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="atividade-cliente">Nível de Atividade</label>
+                            <select id="atividade-cliente" required>
+                                <option value="sedentario">Sedentário</option>
+                                <option value="leve">Leve (1-2 dias/sem)</option>
+                                <option value="moderado">Moderado (3-4 dias/sem)</option>
+                                <option value="ativo">Ativo (5-6 dias/sem)</option>
+                                <option value="muito_ativo">Muito Ativo (diário)</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary-form">Confirmar Cadastro</button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="chat-view" class="content-section">
+                <header class="section-header">
+                    <h2>Chat com [Nome da Cliente]</h2>
+                </header>
+                
+                <div class="chat-layout">
+                    <div class="chat-container">
+                        <div class="chat-messages">
+                            </div>
+                        <div class="chat-actions">
+                            <button class="btn-secondary" id="btn-config-bot-chat">Configurar Bot</button>
+                            <button class="btn-delete" id="btn-delete-client">Excluir Cliente</button>
+                        </div>
+                    </div>
+                    
+                    <div class="plan-manager">
+                        <h3>Plano Alimentar</h3>
+                        
+                        <form id="form-add-alimento">
+                            <select id="select-refeicao">
+                                <option value="cafe da manha">Café da Manhã</option>
+                                <option value="almoco">Almoço</option>
+                                <option value="lanche">Lanche</option>
+                                <option value="janta">Janta</option>
+                                <option value="ceia">Ceia</option>
+                            </select>
+                            <input type="text" id="input-busca-alimento" placeholder="Buscar alimento (ex: Arroz cozido)">
+                            <div id="busca-resultados"></div>
+                        </form>
+                        
+                        <h3>Plano Atual</h3>
+                        <ul id="plano-atual-lista">
+                            </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="bot-config" class="content-section">
+                <header class="section-header">
+                    <h2>Configuração do OTRI</h2>
+                </header>
+                <form class="config-form-container" id="form-bot-config">
+                    <h3>Personalidade do OTRI</h3>
+                    <div class="form-group">
+                        <label for="persona">Definir Persona:</label>
+                        <textarea id="persona" placeholder="Ex: Um assistente amigável e motivador, focado em nutrição funcional..."></textarea>
+                    </div>
+                    <h3>Restrições e Exclusões</h3>
+                    <div class="form-group">
+                        <label for="restricoes">O que o OTRI NÃO deve fazer:</label>
+                        <textarea id="restricoes" placeholder="Ex: Nunca recomendar produtos específicos ou dar diagnósticos médicos."></textarea>
+                    </div>
+
+                    <h3>Escolher Cor do Chat</h3>
+                    <p>Selecione uma cor para personalizar o OTRI da sua cliente:</p>
+                    <div class="color-options">
+                        <span class="color-box" data-color="#2ecc71" style="background-color: #2ecc71;"></span>
+                        <span class="color-box" data-color="#3498db" style="background-color: #3498db;"></span>
+                        <span class="color-box" data-color="#f39c12" style="background-color: #f39c12;"></span>
+                        <span class="color-box" data-color="#9b59b6" style="background-color: #9b59b6;"></span>
+                        <span class="color-box" data-color="#1abc9c" style="background-color: #1abc9c;"></span>
+                    </div>
+                    <button type="submit" class="btn-primary-form">Salvar Configurações</button>
+                </form>
+            </section>
+            
+            <section id="debug" class="content-section">
+                <header class="section-header">
+                    <h2>Tela de Debug</h2>
+                </header>
+                <div class="debug-container">
+                    <p>Selecione um chat para testar a conversa com o bot (você falará como se fosse o cliente).</p>
+                    <select class="client-select">
+                        <option value="">Selecione um cliente...</option>
+                        </select>
+                    <textarea class="debug-input" placeholder="Digite sua mensagem de teste..."></textarea>
+                    <button class="btn-primary-form">Enviar e Testar</button>
+                    <div class="debug-output">
+                        </div>
+                </div>
+            </section>
+            
+            <section id="profile" class="content-section">
+                <header class="section-header">
+                    <h2>Meu Perfil</h2>
+                </header>
+                <div class="form-container">
+                    <form class="profile-form" id="form-profile-nutri">
+                        <div class="form-group">
+                            <label for="nome-perfil">Nome</label>
+                            <input type="text" id="nome-perfil" value="Dr(a). [Seu Nome]">
+                        </div>
+                        <div class="form-group">
+                            <label for="email-perfil">Email</label>
+                            <input type="email" id="email-perfil" value="seu.email@nutri.com">
+                        </div>
+                         <div class="form-group">
+                            <label for="senha-perfil">Nova Senha (deixe em branco para não alterar)</label>
+                            <input type="password" id="senha-perfil" placeholder="••••••••">
+                        </div>
+                        <button type="submit" class="btn-primary-form">Salvar</button>
+                    </form>
+                </div>
+            </section>
+            
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

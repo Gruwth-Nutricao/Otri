@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pandas
+rapidfuzz
+unidecode
+sentence-transformers
+torch
+numpy
+openpyxl 

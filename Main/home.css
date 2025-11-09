@@ -1,0 +1,318 @@
+/* Importação da mesma fonte 'Inter' */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+/* Definição de variáveis CSS para manter a consistência */
+:root {
+    --primary-green: #2ecc71;
+    --primary-blue: #3498db;
+    --background-color: #f8f9fa;
+    --card-background: #ffffff;
+    --text-color: #34495e;
+    --secondary-text-color: #7f8c8d;
+    --border-color: #e0e6ed;
+    --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --active-green: #27ae60;
+}
+
+/* Estilos globais para o corpo */
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* --- Cabeçalho --- */
+.home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: var(--card-background);
+    box-shadow: var(--soft-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+    color: var(--primary-green);
+}
+
+.header-logo h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-color);
+}
+
+.header-nav {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-header-login {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-header-login:hover {
+    background-color: var(--border-color);
+}
+
+.btn-header-plano {
+    text-decoration: none;
+    background-color: var(--primary-green);
+    color: var(--card-background);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn-header-plano:hover {
+    background-color: var(--active-green);
+}
+
+/* --- Seção de Boas-Vindas (Hero) - ESTILOS OTIMIZADOS --- */
+.hero-section {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    gap: 50px;
+    padding: 50px 40px;
+    
+    background-image: linear-gradient(90deg, rgba(7,7,7,0.95) 0%, rgba(7,7,7,0.7) 50%, transparent 100%), url(img_home.png);
+    background-size: cover;
+    background-position: center;
+    height: 80vh;
+}
+
+.hero-content {
+    max-width: 600px;
+    width: 50%; 
+    padding: 2% 5%;
+}
+
+.hero-content h2 {
+    font-size: 3.5rem; /* Aumentado */
+    font-weight: 800; /* Mais pesado */
+    color: #fff; /* Mais contraste */
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+/* Destaque para a palavra-chave no título */
+.hero-content h2 strong {
+    color: var(--primary-green);
+}
+
+.hero-content p {
+    font-size: 1.3rem; /* Aumentado */
+    color: #d0d0d0;
+    margin-bottom: 40px;
+    max-width: 550px; 
+}
+
+/* Botão de Ação Principal */
+.btn-primary-action {
+    background-color: var(--primary-green);
+    color: var(--card-background);
+    text-decoration: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4); /* Sombra de destaque */
+    transition: all 0.3s ease;
+}
+
+.btn-primary-action:hover {
+    background-color: var(--active-green);
+    transform: translateY(-2px); /* Efeito de 'levantar' */
+    box-shadow: 0 8px 20px rgba(46, 204, 113, 0.6);
+}
+
+/* --- Formatação da imagem da home - EFEITO 3D --- */
+.hero-image-container {
+    box-shadow: var(--soft-shadow);
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 450px; /* Aumentado para melhor visualização */
+    
+    /* NOVO: Aplica uma rotação 3D sutil para profundidade */
+    transform: rotateY(-5deg) rotateX(2deg); 
+    transition: transform 0.5s ease;
+}
+
+.hero-image-container:hover {
+    /* Desfaz a rotação no hover para um efeito 'pular' */
+    transform: rotateY(0deg) rotateX(0deg) scale(1.02); 
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.hero-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* --- Seção de Benefícios - ESTILOS OTIMIZADOS --- */
+.benefits-section {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* Aumenta o espaçamento */
+    padding: 80px 40px; /* Aumenta o padding */
+    background-color: var(--card-background);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.benefit-card {
+    background-color: var(--card-background);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--soft-shadow); 
+    max-width: 320px;
+    text-align: center;
+    border: 1px solid var(--border-color); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px); /* Efeito de flutuação */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); 
+}
+
+.benefit-icon {
+    font-size: 3rem; /* Ícone maior */
+    color: var(--primary-green); 
+    margin-bottom: 20px;
+}
+
+.benefit-card h3 {
+    font-size: 1.5rem; 
+    color: var(--text-color);
+    margin-top: 0;
+}
+
+/* --- Seções de Conteúdo --- */
+.about-us-section, .cta-section {
+    padding: 80px 40px;
+    text-align: center;
+}
+
+.about-us-section {
+    background-color: var(--background-color);
+}
+
+.cta-section {
+    background-color: var(--primary-green);
+    color: var(--card-background);
+}
+
+.about-us-content h2, .cta-section h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.about-us-content p {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.2rem; /* Aumentado */
+    color: var(--text-color); /* Mais contraste */
+}
+
+.cta-section p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.btn-cta-large {
+    background-color: var(--card-background);
+    color: var(--primary-green);
+    text-decoration: none;
+    padding: 15px 40px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-cta-large:hover {
+    background-color: #f1f1f1;
+    color: var(--active-green);
+}
+
+/* --- Rodapé --- */
+.home-footer {
+    text-align: center;
+    padding: 20px;
+    background-color: var(--text-color);
+    color: var(--card-background);
+    font-size: 0.9rem;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 1024px) {
+    .hero-content h2 {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .home-header, .hero-section, .benefits-section {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+    .home-header {
+        align-items: flex-start;
+    }
+    .header-nav {
+        margin-top: 15px;
+        width: 100%;
+        justify-content: center;
+    }
+    .hero-section {
+        gap: 30px;
+    }
+    .hero-content h2 {
+        font-size: 2.2rem;
+    }
+    /* Remove o efeito 3D em telas pequenas para evitar bugs */
+    .hero-image-container {
+        width: 100%;
+        max-width: 100%;
+        transform: none; 
+    }
+    .hero-image-container:hover {
+        transform: none;
+        box-shadow: var(--soft-shadow);
+    }
+    .benefits-section {
+        gap: 20px;
+    }
+    .benefit-card {
+        max-width: 100%;
+    }
+    .about-us-content p {
+        font-size: 1rem;
+    }
+    .btn-header-login, .btn-header-plano {
+        flex: 1;
+        text-align: center;
+    }
+}

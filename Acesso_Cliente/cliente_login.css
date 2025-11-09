@@ -1,0 +1,139 @@
+/* Importação da mesma fonte 'Inter' */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* Definição de variáveis CSS para manter a consistência */
+:root {
+    --primary-green: #2ecc71;
+    --primary-blue: #3498db;
+    --background-color: #f8f9fa;
+    --card-background: #ffffff;
+    --text-color: #34495e;
+    --secondary-text-color: #7f8c8d;
+    --border-color: #e0e6ed;
+    --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --active-green: #27ae60;
+}
+
+/* Estilos globais para o corpo */
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Contêiner principal para centralizar o card de login */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* O card de login em si */
+.login-card {
+    background-color: var(--card-background);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: var(--soft-shadow);
+    width: 100%;
+    max-width: 400px; /* Largura máxima para desktops */
+    text-align: center;
+}
+
+/* Cabeçalho do card de login */
+.login-header {
+    margin-bottom: 30px;
+}
+
+.logo-icon {
+    font-size: 3rem;
+    color: var(--primary-green);
+    margin-bottom: 15px;
+}
+
+.login-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: var(--text-color);
+    font-weight: 700;
+}
+
+.login-header p {
+    color: var(--secondary-text-color);
+    margin: 5px 0 0;
+}
+
+/* Estilos do formulário e campos de input */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--secondary-text-color);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-green);
+}
+
+/* Botões de ação */
+.btn-login {
+    background-color: var(--primary-green);
+    color: var(--card-background);
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-login:hover {
+    background-color: var(--active-green);
+    transform: translateY(-2px);
+}
+
+.login-footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.login-footer p {
+    font-size: 0.9rem;
+    color: var(--secondary-text-color);
+}
+
+/* Responsividade básica para telas pequenas */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 30px 20px;
+        margin: 0 15px;
+    }
+}

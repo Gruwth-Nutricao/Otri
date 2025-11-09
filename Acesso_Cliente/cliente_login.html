@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Cliente | OTRI</title>
+    <link rel="stylesheet" href="cliente_login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-apple-alt logo-icon"></i>
+                <h2>Bem-vinda, cliente!</h2>
+                <p>Acesse seu painel e acompanhe seu progresso</p>
+            </div>
+            
+            <form class="login-form" id="login-form-cliente">
+                <div class="input-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="nome@exemplo.com" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn-login">
+                    Entrar
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <p id="login-error" style="color: red; margin-bottom: 15px;"></p>
+                <p>Problemas com seu acesso? Fale com seu nutricionista.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form-cliente').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('password').value;
+            const errorP = document.getElementById('login-error');
+            errorP.textContent = ''; 
+
+            try {
+                // Usamos um caminho relativo para a API
+                const response = await fetch(`/api/login/cliente`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, senha: senha })
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.detail || 'Erro de login');
+                }
+
+                const data = await response.json();
+                
+                // Salva os dados no localStorage
+                localStorage.setItem('id_cliente', data.id_cliente);
+                localStorage.setItem('nome_cliente', data.nome);
+                localStorage.setItem('nome_nutri', data.nome_nutri); // <--- NOVO
+                
+                // Redireciona para o dashboard (relativo)
+                window.location.href = 'cliente_dashboard.html';
+
+            } catch (error) {
+                errorP.textContent = error.message;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Cliente | OTRI </title>
+    <link rel="stylesheet" href="cliente_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <div class="main-container">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-apple-alt logo-icon"></i>
+                <h1 class="logo-text">OTRI</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-target="home">
+                    <i class="fas fa-home nav-icon"></i> Início
+                </a>
+                <a href="#" class="nav-item" data-target="perfil">
+                    <i class="fas fa-user nav-icon"></i> Meu Perfil
+                </a>
+                <a href="#" class="nav-item" data-target="plano">
+                    <i class="fas fa-book-open nav-icon"></i> Plano Nutricional
+                </a>
+                <a href="#" class="nav-item" data-target="info">
+                    <i class="fas fa-info-circle nav-icon"></i> Informações
+                </a>
+            </nav>
+            <div class="sidebar-profile">
+                <span>Bem-vindo(a), Maria!</span>
+                <a href="cliente_login.html" class="logout-link">Sair</a>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            
+            <section id="home" class="content-section active">
+                <header class="chat-header">
+                    <img src="https://via.placeholder.com/50" alt="Foto da Nutricionista" class="nutri-avatar">
+                    <div class="nutri-info">
+                        <h2>Dr(a). [Nome da Nutricionista]</h2>
+                        <p class="nutri-status">Bot de Nutrição Online</p>
+                    </div>
+                </header>
+                <div class="chat-container">
+                    <div class="chat-messages">
+                        <div class="chat-bubble bot-message">
+                            Olá, Maria! Bem-vinda de volta. Estou aqui para te ajudar a manter o foco no seu plano.
+                        </div>
+                        <div class="chat-bubble user-message">
+                            Olá! Tenho uma dúvida sobre meu jantar.
+                        </div>
+                    </div>
+                    <form class="chat-input-form">
+                        <input type="text" placeholder="Envie uma mensagem..." class="chat-input-field">
+                        <button type="submit" class="btn-chat-send">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="perfil" class="content-section hidden">
+                <header class="section-header">
+                    <h2>Meu Perfil</h2>
+                </header>
+                <div class="card-container">
+                    <div class="info-card">
+                        <h3>Informações Pessoais</h3>
+                        <p><strong>Nome:</strong> Maria Silva</p>
+                        <p><strong>Email:</strong> maria.silva@email.com</p>
+                        <p><strong>Data de Nascimento:</strong> 15/05/1990</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Metas e Dados do Plano</h3>
+                        <p><strong>Objetivo:</strong> Emagrecimento</p>
+                        <p><strong>Meta:</strong> Perder 10kg</p>
+                        <p><strong>Peso Atual:</strong> 80kg</p>
+                        <p><strong>Altura:</strong> 1,65m</p>
+                        <p><strong>IMC:</strong> 29.38</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="plano" class="content-section hidden">
+                <header class="section-header">
+                    <h2>Detalhes do Plano Nutricional</h2>
+                </header>
+                <div class="plano-container">
+                    <div class="refeicao-card">
+                        <h3><i class="fas fa-coffee refeicao-icon"></i> Café da Manhã</h3>
+                        <ul>
+                            <li>Opção 1: Iogurte natural com frutas e aveia.</li>
+                            <li>Opção 2: Pão integral com queijo branco e uma xícara de café.</li>
+                        </ul>
+                    </div>
+                    <div class="refeicao-card">
+                        <h3><i class="fas fa-utensils refeicao-icon"></i> Almoço</h3>
+                        <ul>
+                            <li>Opção 1: Salmão assado com purê de batata-doce e salada verde.</li>
+                            <li>Opção 2: Arroz integral, feijão, frango grelhado e legumes cozidos.</li>
+                        </ul>
+                    </div>
+                    <div class="refeicao-card">
+                        <h3><i class="fas fa-moon refeicao-icon"></i> Jantar</h3>
+                        <ul>
+                            <li>Opção 1: Sopa de legumes com croutons integrais.</li>
+                            <li>Opção 2: Omelete com recheio de legumes e uma porção de salada.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="info" class="content-section hidden">
+                <header class="section-header">
+                    <h2>Informações da Nutricionista</h2>
+                </header>
+                <div class="info-card">
+                    <div class="nutri-profile">
+                        <img src="https://via.placeholder.com/100" alt="Foto da Nutricionista" class="nutri-full-avatar">
+                        <div>
+                            <h3>Dr(a). [Nome da Nutricionista]</h3>
+                            <p class="nutri-credenciais">CRN 123456</p>
+                        </div>
+                    </div>
+                    <div class="nutri-contato">
+                        <h4>Contato e Suporte</h4>
+                        <p>Em caso de dúvidas complexas ou urgências, entre em contato:</p>
+                        <ul>
+                            <li><i class="fas fa-phone-alt"></i> Telefone: (99) 99999-9999</li>
+                            <li><i class="fas fa-envelope"></i> E-mail: nutricionista@email.com</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="cliente_dashboard.js"></script>
+</body>
+</html>

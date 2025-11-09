@@ -1,0 +1,561 @@
+{
+  "nutricionistas": {
+    "042d667e": {
+      "nome": "Dra. Exemplo",
+      "criado_em": "2025-10-02T01:10:14.902934"
+    }
+  },
+  "clientes": {
+    "bbfee80f": {
+      "nome": "Cliente Exemplo",
+      "idade": 30,
+      "sexo": "F",
+      "peso_kg": 31.0,
+      "altura_cm": 165.0,
+      "atividade": "leve",
+      "peso_inicial": 70.0,
+      "meta": null,
+      "agua_meta_ml": null,
+      "criado_em": "2025-10-02T01:10:14.909999"
+    },
+    "aa85c656": {
+      "nome": "guilherme",
+      "idade": 89,
+      "sexo": "M",
+      "peso_kg": 67.0,
+      "altura_cm": 194.0,
+      "atividade": "ativo",
+      "peso_inicial": 67.0,
+      "meta": null,
+      "agua_meta_ml": null,
+      "criado_em": "2025-10-02T01:43:40.858321"
+    }
+  },
+  "planos": {
+    "bbfee80f": {
+      "cafe da manha": [
+        {
+          "id": "157c8dae",
+          "nome": "pao com manteiga",
+          "per_100g": {
+            "cal": 90.0,
+            "prot": 23.0,
+            "carb": 43.0,
+            "fat": 23.0
+          }
+        }
+      ],
+      "almoco": [
+        {
+          "id": "ce68704f",
+          "nome": "pastel",
+          "per_100g": {
+            "cal": 234.0,
+            "prot": 21.0,
+            "carb": 12.0,
+            "fat": 54.0
+          }
+        },
+        {
+          "id": "0f0cbbc8",
+          "nome": "arroz com feijao e bife",
+          "per_100g": {
+            "cal": 43.0,
+            "prot": 324.0,
+            "carb": 213.0,
+            "fat": 13.0
+          }
+        },
+        {
+          "id": "4e205d17",
+          "nome": "macarrao",
+          "per_100g": {
+            "cal": 435.86,
+            "prot": 8.79,
+            "carb": 62.43,
+            "fat": 17.24
+          }
+        }
+      ],
+      "janta": [
+        {
+          "id": "67cfe579",
+          "nome": "macarrao",
+          "per_100g": {
+            "cal": 900.0,
+            "prot": 40.0,
+            "carb": 20.0,
+            "fat": 200.0
+          }
+        },
+        {
+          "id": "f21443b9",
+          "nome": "macarrao bolonhesa",
+          "per_100g": {
+            "cal": 119.53,
+            "prot": 4.93,
+            "carb": 22.52,
+            "fat": 0.89
+          }
+        }
+      ]
+    },
+    "aa85c656": {
+      "janta": [
+        {
+          "id": "035d13ae",
+          "nome": "whey protein",
+          "per_100g": {
+            "cal": 200.0,
+            "prot": 100.0,
+            "carb": 40.0,
+            "fat": 10.0
+          }
+        }
+      ],
+      "almoco": [
+        {
+          "id": "91ae4a58",
+          "nome": "Pastel, de carne, frito",
+          "per_100g": {
+            "cal": 388.37,
+            "prot": 10.1,
+            "carb": 43.77,
+            "fat": 20.14
+          }
+        }
+      ],
+      "cafe da manha": [
+        {
+          "id": "b475cfbe",
+          "nome": "Mortadela",
+          "per_100g": {
+            "cal": 268.82,
+            "prot": 11.95,
+            "carb": 5.82,
+            "fat": 21.65
+          }
+        },
+        {
+          "id": "71bafd88",
+          "nome": "Biscoito, salgado, cream cracker",
+          "per_100g": {
+            "cal": 431.73,
+            "prot": 10.06,
+            "carb": 68.73,
+            "fat": 14.44
+          }
+        }
+      ]
+    }
+  },
+  "conversas": {
+    "bbfee80f": [
+      {
+        "role": "bot",
+        "text": "Opções para cafe da manha (valores por 100g): | - pao com manteiga: 90 kcal / 100g; prot 23.0g; carb 43.0g; gordura 23.0g.",
+        "time": "2025-10-02T01:17:37.493644"
+      },
+      {
+        "role": "user",
+        "text": "o que eu posso comer de cafe da manha",
+        "time": "2025-10-02T01:17:37.502200"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para cafe da manha (valores por 100g):\n- pao com manteiga: 90 kcal / 100g; prot 23.0g; carb 43.0g; gordura 23.0g.",
+        "time": "2025-10-02T01:17:37.502310"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para almoco (valores por 100g): | - pastel: 234 kcal / 100g; prot 21.0g; carb 12.0g; gordura 54.0g.",
+        "time": "2025-10-02T01:17:50.662032"
+      },
+      {
+        "role": "user",
+        "text": "o que eu posso almocar",
+        "time": "2025-10-02T01:17:50.671333"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para almoco (valores por 100g):\n- pastel: 234 kcal / 100g; prot 21.0g; carb 12.0g; gordura 54.0g.",
+        "time": "2025-10-02T01:17:50.671345"
+      },
+      {
+        "role": "user",
+        "text": "quantas calorias tem o pastel ?",
+        "time": "2025-10-02T01:18:00.112215"
+      },
+      {
+        "role": "bot",
+        "text": "A resposta anterior indica ~234.0 kcal.",
+        "time": "2025-10-02T01:18:00.112222"
+      },
+      {
+        "role": "user",
+        "text": "quanta agua devo beber?",
+        "time": "2025-10-02T01:18:10.014325"
+      },
+      {
+        "role": "bot",
+        "text": "Desculpe, não entendi. Tente: 'O que eu posso comer no café da manhã?', 'Comi arroz 200g no almoço', 'Quantas calorias isso tem?', ou 'O que ainda posso comer sem estourar as calorias?'.",
+        "time": "2025-10-02T01:18:10.014333"
+      },
+      {
+        "role": "bot",
+        "text": "Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal. | Sugestões que cabem no restante (porção máxima aproximada): | - pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g | - pastel (almoco): 234 kcal/100g — até ~834 g",
+        "time": "2025-10-02T01:18:26.564576"
+      },
+      {
+        "role": "user",
+        "text": "o que eu ainda posso comer sem estourar as calorias?",
+        "time": "2025-10-02T01:18:26.573750"
+      },
+      {
+        "role": "bot",
+        "text": "Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal.\nSugestões que cabem no restante (porção máxima aproximada):\n- pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g\n- pastel (almoco): 234 kcal/100g — até ~834 g",
+        "time": "2025-10-02T01:18:26.573761"
+      },
+      {
+        "role": "user",
+        "text": "qual meu peso",
+        "time": "2025-10-02T01:19:13.119520"
+      },
+      {
+        "role": "bot",
+        "text": "Desculpe, não entendi. Tente: 'O que eu posso comer no café da manhã?', 'Comi arroz 200g no almoço', 'Quantas calorias isso tem?', ou 'O que ainda posso comer sem estourar as calorias?'.",
+        "time": "2025-10-02T01:19:13.119528"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para almoco (valores por 100g): | - pastel: 234 kcal / 100g; prot 21.0g; carb 12.0g; gordura 54.0g.",
+        "time": "2025-10-02T01:21:03.815601"
+      },
+      {
+        "role": "user",
+        "text": "o que eu devo comer no almoco",
+        "time": "2025-10-02T01:21:03.825225"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para almoco (valores por 100g):\n- pastel: 234 kcal / 100g; prot 21.0g; carb 12.0g; gordura 54.0g.",
+        "time": "2025-10-02T01:21:03.825320"
+      },
+      {
+        "role": "user",
+        "text": "quanta agua devo beber ?",
+        "time": "2025-10-02T01:21:11.731753"
+      },
+      {
+        "role": "bot",
+        "text": "Sugestão de ingestão de água: ~2450 ml/dia (~2.45 L).",
+        "time": "2025-10-02T01:21:11.731760"
+      },
+      {
+        "role": "user",
+        "text": "quanto eu peso ?",
+        "time": "2025-10-02T01:21:16.732385"
+      },
+      {
+        "role": "bot",
+        "text": "Desculpe, não entendi. Tente: 'O que eu posso comer no café da manhã?', 'Comi arroz 200g no almoço', 'Quantas calorias isso tem?', ou 'O que ainda posso comer sem estourar as calorias?'.",
+        "time": "2025-10-02T01:21:16.732393"
+      },
+      {
+        "role": "user",
+        "text": "qual meu peso",
+        "time": "2025-10-02T01:21:20.037804"
+      },
+      {
+        "role": "bot",
+        "text": "Desculpe, não entendi. Tente: 'O que eu posso comer no café da manhã?', 'Comi arroz 200g no almoço', 'Quantas calorias isso tem?', ou 'O que ainda posso comer sem estourar as calorias?'.",
+        "time": "2025-10-02T01:21:20.037811"
+      },
+      {
+        "role": "user",
+        "text": "registrei: 1 pastel 100.0g no refeicao",
+        "time": "2025-10-02T01:22:21.088002"
+      },
+      {
+        "role": "user",
+        "text": "eu comi 1 pastel",
+        "time": "2025-10-02T01:22:21.098251"
+      },
+      {
+        "role": "bot",
+        "text": "Registrado: 1 pastel 100.0g → 100.0 kcal",
+        "time": "2025-10-02T01:22:21.098262"
+      },
+      {
+        "role": "bot",
+        "text": "Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal. | Sugestões que cabem no restante (porção máxima aproximada): | - pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g | - pastel (almoco): 234 kcal/100g — até ~834 g",
+        "time": "2025-10-02T01:22:26.901139"
+      },
+      {
+        "role": "user",
+        "text": "o que eu ainda posso comer",
+        "time": "2025-10-02T01:22:26.910753"
+      },
+      {
+        "role": "bot",
+        "text": "Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal.\nSugestões que cabem no restante (porção máxima aproximada):\n- pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g\n- pastel (almoco): 234 kcal/100g — até ~834 g",
+        "time": "2025-10-02T01:22:26.910762"
+      },
+      {
+        "role": "bot",
+        "text": "Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal. | Sugestões que cabem no restante (porção máxima aproximada): | - pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g | - pastel (almoco): 234 kcal/100g — até ~834 g",
+        "time": "2025-10-02T01:22:44.918621"
+      },
+      {
+        "role": "user",
+        "text": "eu comi 4 pasteis",
+        "time": "2025-10-02T01:22:44.927694"
+      },
+      {
+        "role": "bot",
+        "text": "Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal.\nSugestões que cabem no restante (porção máxima aproximada):\n- pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g\n- pastel (almoco): 234 kcal/100g — até ~834 g",
+        "time": "2025-10-02T01:22:44.927702"
+      },
+      {
+        "role": "bot",
+        "text": "Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal. | Sugestões que cabem no restante (porção máxima aproximada): | - pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g | - pastel (almoco): 234 kcal/100g — até ~834 g",
+        "time": "2025-10-02T01:22:53.222662"
+      },
+      {
+        "role": "user",
+        "text": "eu comi 3 pasteis",
+        "time": "2025-10-02T01:22:53.232271"
+      },
+      {
+        "role": "bot",
+        "text": "Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal.\nSugestões que cabem no restante (porção máxima aproximada):\n- pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g\n- pastel (almoco): 234 kcal/100g — até ~834 g",
+        "time": "2025-10-02T01:22:53.232281"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para cafe da manha (valores por 100g): | - pao com manteiga: 90 kcal / 100g; prot 23.0g; carb 43.0g; gordura 23.0g.",
+        "time": "2025-10-02T01:23:04.607999"
+      },
+      {
+        "role": "user",
+        "text": "o que eu posso comer no cafe da manha",
+        "time": "2025-10-02T01:23:04.617491"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para cafe da manha (valores por 100g):\n- pao com manteiga: 90 kcal / 100g; prot 23.0g; carb 43.0g; gordura 23.0g.",
+        "time": "2025-10-02T01:23:04.617500"
+      },
+      {
+        "role": "user",
+        "text": "",
+        "time": "2025-10-02T01:23:05.839612"
+      },
+      {
+        "role": "bot",
+        "text": "Desculpe, não entendi. Tente: 'O que eu posso comer no café da manhã?', 'Comi arroz 200g no almoço', 'Quantas calorias isso tem?', ou 'O que ainda posso comer sem estourar as calorias?'.",
+        "time": "2025-10-02T01:23:05.839620"
+      },
+      {
+        "role": "user",
+        "text": "Me forneca todas as informacoes sobre mim",
+        "time": "2025-10-02T01:27:27.072953"
+      },
+      {
+        "role": "bot",
+        "text": "=== RELATÓRIO COMPLETO DO CLIENTE ===\nNome: Cliente Exemplo\nIdade: 30 | Sexo: F\nPeso atual: 70.0 kg | Altura: 165.0 cm\nPeso inicial: 70.0 | Meta: None\nIMC: 25.71 — Sobrepeso (IMC 25–29.9)\nÁgua recomendada: ~2450 ml/dia (~2.45 L)\nBMR: 1420 kcal/dia | TDEE: 1953 kcal/dia (atividade: leve)\nConsumido hoje: 0.0 kcal (0 registros)\n\n--- Resumo do plano alimentar ---\n- cafe da manha: 1 opções\n- almoco: 1 opções\n  • Exemplo cafe da manha: pao com manteiga — 90.0 kcal/100g\n  • Exemplo almoco: pastel — 234.0 kcal/100g\n\n--- Últimos registros de consumo ---\n* 2025-10-02T01:22:21.087894 | refeicao | 1 pastel 100.0g → 100.0 kcal\n\n--- Últimas mensagens (histórico) ---\n[2025-10-02T01:22:44.927694] user: eu comi 4 pasteis\n[2025-10-02T01:22:44.927702] bot: Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal.\nSugestões que cabem no restante (porção máxima aproximada):\n- pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g\n- pastel (almoco): 234 kcal/100g — até ~834 g\n[2025-10-02T01:22:53.222662] bot: Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal. | Sugestões que cabem no restante (porção máxima aproximada): | - pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g | - pastel (almoco): 234 kcal/100g — até ~834 g\n[2025-10-02T01:22:53.232271] user: eu comi 3 pasteis\n[2025-10-02T01:22:53.232281] bot: Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal.\nSugestões que cabem no restante (porção máxima aproximada):\n- pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g\n- pastel (almoco): 234 kcal/100g — até ~834 g\n[2025-10-02T01:23:04.607999] bot: Opções para cafe da manha (valores por 100g): | - pao com manteiga: 90 kcal / 100g; prot 23.0g; carb 43.0g; gordura 23.0g.\n[2025-10-02T01:23:04.617491] user: o que eu posso comer no cafe da manha\n[2025-10-02T01:23:04.617500] bot: Opções para cafe da manha (valores por 100g):\n- pao com manteiga: 90 kcal / 100g; prot 23.0g; carb 43.0g; gordura 23.0g.\n[2025-10-02T01:23:05.839612] user: \n[2025-10-02T01:23:05.839620] bot: Desculpe, não entendi. Tente: 'O que eu posso comer no café da manhã?', 'Comi arroz 200g no almoço', 'Quantas calorias isso tem?', ou 'O que ainda posso comer sem estourar as calorias?'.",
+        "time": "2025-10-02T01:27:27.073111"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para almoco (valores por 100g): | - pastel: 234 kcal / 100g; prot 21.0g; carb 12.0g; gordura 54.0g. | - arroz com feijao e bife: 43 kcal / 100g; prot 324.0g; carb 213.0g; gordura 13.0g.",
+        "time": "2025-10-02T01:50:39.253636"
+      },
+      {
+        "role": "user",
+        "text": "o que eu posso comer de almoco",
+        "time": "2025-10-02T01:50:39.263556"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para almoco (valores por 100g):\n- pastel: 234 kcal / 100g; prot 21.0g; carb 12.0g; gordura 54.0g.\n- arroz com feijao e bife: 43 kcal / 100g; prot 324.0g; carb 213.0g; gordura 13.0g.",
+        "time": "2025-10-02T01:50:39.263566"
+      },
+      {
+        "role": "user",
+        "text": "quantas calorias tem o pastel",
+        "time": "2025-10-02T01:50:56.200790"
+      },
+      {
+        "role": "bot",
+        "text": "A resposta anterior indica ~234.0 kcal.",
+        "time": "2025-10-02T01:50:56.200797"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para almoco (valores por 100g): | - pastel: 234 kcal / 100g; prot 21.0g; carb 12.0g; gordura 54.0g. | - arroz com feijao e bife: 43 kcal / 100g; prot 324.0g; carb 213.0g; gordura 13.0g.",
+        "time": "2025-10-02T01:51:08.535852"
+      },
+      {
+        "role": "user",
+        "text": "me de uma opcao de almoco",
+        "time": "2025-10-02T01:51:08.546092"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para almoco (valores por 100g):\n- pastel: 234 kcal / 100g; prot 21.0g; carb 12.0g; gordura 54.0g.\n- arroz com feijao e bife: 43 kcal / 100g; prot 324.0g; carb 213.0g; gordura 13.0g.",
+        "time": "2025-10-02T01:51:08.546100"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para cafe da manha (valores por 100g): | - pao com manteiga: 90 kcal / 100g; prot 23.0g; carb 43.0g; gordura 23.0g.",
+        "time": "2025-10-02T01:51:18.386555"
+      },
+      {
+        "role": "user",
+        "text": "me de uma opcao de cafe da manha",
+        "time": "2025-10-02T01:51:18.397123"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para cafe da manha (valores por 100g):\n- pao com manteiga: 90 kcal / 100g; prot 23.0g; carb 43.0g; gordura 23.0g.",
+        "time": "2025-10-02T01:51:18.397133"
+      },
+      {
+        "role": "user",
+        "text": "quantas calorias tem",
+        "time": "2025-10-02T01:51:21.646242"
+      },
+      {
+        "role": "bot",
+        "text": "A resposta anterior indica ~90.0 kcal.",
+        "time": "2025-10-02T01:51:21.646251"
+      },
+      {
+        "role": "user",
+        "text": "registrei: um pastel 100.0g no refeicao",
+        "time": "2025-10-02T01:52:34.149962"
+      },
+      {
+        "role": "user",
+        "text": "hoje eu comi um pastel",
+        "time": "2025-10-02T01:52:34.160641"
+      },
+      {
+        "role": "bot",
+        "text": "Registrado: um pastel 100.0g → 100.0 kcal",
+        "time": "2025-10-02T01:52:34.160653"
+      },
+      {
+        "role": "bot",
+        "text": "Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal. | Sugestões que cabem no restante (porção máxima aproximada): | - arroz com feijao e bife (almoco): 43 kcal/100g — até ~4541 g | - pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g | - pastel (almoco): 234 kcal/100g — até ~834 g | - macarrao (janta): 900 kcal/100g — até ~216 g",
+        "time": "2025-10-02T01:52:59.132379"
+      },
+      {
+        "role": "user",
+        "text": "o que eu ainda posso comer hoje",
+        "time": "2025-10-02T01:52:59.141888"
+      },
+      {
+        "role": "bot",
+        "text": "Meta estimada: ~1953 kcal. Consumido hoje: 0 kcal. Restam ~1953 kcal.\nSugestões que cabem no restante (porção máxima aproximada):\n- arroz com feijao e bife (almoco): 43 kcal/100g — até ~4541 g\n- pao com manteiga (cafe da manha): 90 kcal/100g — até ~2169 g\n- pastel (almoco): 234 kcal/100g — até ~834 g\n- macarrao (janta): 900 kcal/100g — até ~216 g",
+        "time": "2025-10-02T01:52:59.141896"
+      },
+      {
+        "role": "user",
+        "text": "quanto de agua tenho que tomar",
+        "time": "2025-10-02T01:54:05.093643"
+      },
+      {
+        "role": "bot",
+        "text": "Sugestão de ingestão de água: ~2450 ml/dia (~2.45 L).",
+        "time": "2025-10-02T01:54:05.093653"
+      },
+      {
+        "role": "user",
+        "text": "qual meu imc",
+        "time": "2025-10-02T01:54:16.038530"
+      },
+      {
+        "role": "bot",
+        "text": "Nome: Cliente Exemplo\nIdade: 30 | Sexo: F\nPeso atual: 70.0 kg | Altura: 165.0 cm\nBMR ≈ 1420 kcal/dia | TDEE ≈ 1953 kcal/dia (atividade: leve)\nConsumido hoje: 0 kcal (0 registros)\nÁgua sugerida: ~2450 ml/dia (~2.45 L).",
+        "time": "2025-10-02T01:54:16.038537"
+      },
+      {
+        "role": "user",
+        "text": "quero todas minhas informacoes",
+        "time": "2025-10-02T01:56:35.289649"
+      },
+      {
+        "role": "bot",
+        "text": "Nome: Cliente Exemplo\nIdade: 30 | Sexo: F\nPeso atual: 70.0 kg | Altura: 165.0 cm\nBMR ≈ 1420 kcal/dia | TDEE ≈ 1953 kcal/dia (atividade: leve)\nConsumido hoje: 0 kcal (0 registros)\nÁgua sugerida: ~2450 ml/dia (~2.45 L).",
+        "time": "2025-10-02T01:56:35.289655"
+      },
+      {
+        "role": "bot",
+        "text": "Olá Cliente Exemplo! Em que posso te ajudar hoje?",
+        "time": "2025-11-09T02:46:20.834388"
+      },
+      {
+        "role": "user",
+        "text": "ola",
+        "time": "2025-11-09T02:46:20.844732"
+      },
+      {
+        "role": "bot",
+        "text": "Olá Cliente Exemplo! Em que posso te ajudar hoje?",
+        "time": "2025-11-09T02:46:20.844837"
+      },
+      {
+        "role": "bot",
+        "text": "Olá Cliente Exemplo! Em que posso te ajudar hoje?",
+        "time": "2025-11-09T02:46:25.611439"
+      },
+      {
+        "role": "user",
+        "text": "tudo bem",
+        "time": "2025-11-09T02:46:25.621577"
+      },
+      {
+        "role": "bot",
+        "text": "Olá Cliente Exemplo! Em que posso te ajudar hoje?",
+        "time": "2025-11-09T02:46:25.621586"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para almoco (valores por 100g): | - pastel: 234 kcal / 100g; prot 21.0g; carb 12.0g; gordura 54.0g. | - arroz com feijao e bife: 43 kcal / 100g; prot 324.0g; carb 213.0g; gordura 13.0g. | - macarrao: 436 kcal / 100g; prot 8.79g; carb 62.43g; gordura 17.24g.",
+        "time": "2025-11-09T02:46:34.045243"
+      },
+      {
+        "role": "user",
+        "text": "oque posso almoçar",
+        "time": "2025-11-09T02:46:34.053883"
+      },
+      {
+        "role": "bot",
+        "text": "Opções para almoco (valores por 100g):\n- pastel: 234 kcal / 100g; prot 21.0g; carb 12.0g; gordura 54.0g.\n- arroz com feijao e bife: 43 kcal / 100g; prot 324.0g; carb 213.0g; gordura 13.0g.\n- macarrao: 436 kcal / 100g; prot 8.79g; carb 62.43g; gordura 17.24g.",
+        "time": "2025-11-09T02:46:34.053893"
+      }
+    ]
+  },
+  "registros_consumo": {
+    "bbfee80f": [
+      {
+        "id": "330928e6",
+        "data_hora": "2025-10-02T01:22:21.087894",
+        "refeicao": "refeicao",
+        "nome_item": "1 pastel",
+        "gramas": 100.0,
+        "kcal": 100.0
+      },
+      {
+        "id": "d946234e",
+        "data_hora": "2025-10-02T01:52:34.149882",
+        "refeicao": "refeicao",
+        "nome_item": "um pastel",
+        "gramas": 100.0,
+        "kcal": 100.0
+      }
+    ]
+  }
+}

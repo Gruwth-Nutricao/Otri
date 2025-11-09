@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | OTRI </title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-seedling logo-icon"></i>
+                <h2>Bem-vindo(a) de volta!</h2>
+                <p>Acesse sua conta</p>
+            </div>
+            
+            <form class="login-form" id="login-form-nutri">
+                <div class="input-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="nome@exemplo.com" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn-login">
+                    Entrar
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <p id="login-error" style="color: red; margin-bottom: 15px;"></p>
+                <p>Ainda não tem uma conta?</p>
+                <button class="btn-adquirir-plano">
+                    Adquirir um Plano
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form-nutri').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('password').value;
+            const errorP = document.getElementById('login-error');
+            errorP.textContent = ''; 
+
+            try {
+                const response = await fetch(`/api/login/nutricionista`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, senha: senha })
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.detail || 'Erro de login');
+                }
+
+                const data = await response.json();
+                
+                // Salva o ID da Nutri no localStorage
+                localStorage.setItem('id_nutri', data.id_nutri);
+                localStorage.setItem('nome_nutri', data.nome);
+                
+                // Redireciona para o dashboard
+                window.location.href = 'dashboard.html';
+
+            } catch (error) {
+                errorP.textContent = error.message;
+            }
+        });
+    </script>
+</body>
+</html>
