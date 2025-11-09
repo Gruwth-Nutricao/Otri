@@ -1,0 +1,11 @@
+
+venv/
+
+__pycache__/
+*.pyc
+
+nutri.db
+*.db
+
+banco_dados_nutri.json
+*.xlsx
