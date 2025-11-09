@@ -1,3 +1,10 @@
+#COMO RODAR 
+
+apos criar o ambiente virtual 
+.\venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn api:app --reload
+
 
 # Gruwth – Nutrição Inteligente com IA
 
