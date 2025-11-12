@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulação de Chat</title>
+    <link rel="stylesheet" href="chat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <div class="mobile-container">
+        <div class="chat-header">
+            <i class="fas fa-arrow-left"></i>
+            <img src="https://via.placeholder.com/40" alt="Avatar" class="avatar">
+            <div class="contact-info">
+                <h3>Otri Nutri Bot 🤖</h3>
+                <span>online</span>
+            </div>
+            <i class="fas fa-video"></i>
+            <i class="fas fa-phone"></i>
+        </div>
+
+        <div class="chat-area" id="chat-messages">
+            </div>
+
+        <form class="chat-input-bar" id="chat-form">
+            <i class="fas fa-laugh"></i>
+            <input type="text" id="chat-input" placeholder="Mensagem">
+            <i class="fas fa-paperclip"></i>
+            <i class="fas fa-camera"></i>
+            <button type="submit" class="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+
+    <script src="chat.js"></script>
+</body>
+</html>

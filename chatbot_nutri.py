@@ -1,3 +1,4 @@
+
 import os
 import json
 import re
@@ -8,25 +9,20 @@ import uuid
 from unidecode import unidecode
 from datetime import datetime, date
 from typing import List, Dict, Any, Optional, Tuple
-import sqlite3 # Importamos SQLite
+import sqlite3 
 try:
     from sentence_transformers import SentenceTransformer, util
 except Exception as e:
     raise RuntimeError("Erro ao importar sentence-transformers. "
                        "Instale com: pip install sentence-transformers torch numpy") from e
 
-# --- Constantes e Modelos Globais ---
-
-# 1. Modelos de IA (carregados uma vez)
 MODELO_EMBEDDING = "paraphrase-multilingual-MiniLM-L12-v2"
 MODELO_IA = None
 DF_ALIMENTOS = None
 INTENCOES_EMBED = {}
 
-# 2. Banco de Dados
 ARQUIVO_BANCO = "nutri.db" 
 
-# 3. Lógica de Negócio
 FATORES_ATIVIDADE = {
     "sedentario": 1.2,
     "leve": 1.375,
@@ -38,13 +34,10 @@ MEAL_KEYS = ["cafe da manha", "almoco", "lanche", "lanche da tarde", "janta", "c
 GRAMAS_PATTERN = re.compile(r'(\d+(?:[.,]\d+)?)\s*(g|gramas|grama|gr)\b', re.I)
 ITEM_GRAMA_PAIR_PATTERN = re.compile(r'([A-Za-zÀ-ú0-9\s\-\+]+?)\s*,?\s*(\d+(?:[.,]\d+)?\s*(?:g|gramas|gr)\b)', re.I)
 
-# --- Funções de Inicialização ---
-
 def carregar_modelos():
-    """Carrega os modelos de IA e a base de dados de alimentos na memória."""
     global MODELO_IA, DF_ALIMENTOS, INTENCOES_EMBED
     
-    if MODELO_IA: # Previne recarregamento
+    if MODELO_IA: 
         return
 
     print("Carregando modelo de IA...")
@@ -82,23 +75,18 @@ def carregar_modelos():
         INTENCOES_EXEMPLO = {}
         INTENCOES_EMBED = {}
 
-
-# --- Nova Arquitetura de Banco de Dados (SQLite) ---
-
 def get_db():
-    """Cria uma conexão com o banco de dados."""
     db = sqlite3.connect(ARQUIVO_BANCO, check_same_thread=False)
-    db.row_factory = sqlite3.Row # Permite acessar colunas por nome
+    db.row_factory = sqlite3.Row 
     return db
 
 def init_db():
-    """Cria as tabelas do banco de dados se não existirem."""
     schema = """
     CREATE TABLE IF NOT EXISTS nutricionistas (
         id_nutri TEXT PRIMARY KEY,
         nome TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
-        senha TEXT NOT NULL, -- Em produção, deve ser um hash
+        senha TEXT NOT NULL,
         criado_em TEXT NOT NULL,
         bot_persona TEXT,
         bot_restricoes TEXT,
@@ -107,10 +95,10 @@ def init_db():
 
     CREATE TABLE IF NOT EXISTS clientes (
         id_cliente TEXT PRIMARY KEY,
-        id_nutri TEXT NOT NULL, -- Link para o nutricionista
+        id_nutri TEXT NOT NULL,
         nome TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
-        senha TEXT NOT NULL, -- Em produção, deve ser um hash
+        senha TEXT NOT NULL,
         idade INTEGER,
         sexo TEXT,
         peso_kg REAL,
@@ -127,21 +115,21 @@ def init_db():
         id_plano INTEGER PRIMARY KEY AUTOINCREMENT,
         id_cliente TEXT NOT NULL,
         refeicao TEXT NOT NULL,
-        id_item TEXT NOT NULL, -- uuid do item
+        id_item TEXT NOT NULL,
         nome TEXT NOT NULL,
         cal_100g REAL DEFAULT 0,
         prot_100g REAL DEFAULT 0,
         carb_100g REAL DEFAULT 0,
         fat_100g REAL DEFAULT 0,
         embedding_texto TEXT,
-        embedding_vec BLOB, -- Armazena o embedding como BLOB
+        embedding_vec BLOB,
         UNIQUE(id_cliente, refeicao, nome)
     );
 
     CREATE TABLE IF NOT EXISTS conversas (
         id_conversa INTEGER PRIMARY KEY AUTOINCREMENT,
         id_cliente TEXT NOT NULL,
-        role TEXT NOT NULL, -- 'user' or 'bot'
+        role TEXT NOT NULL,
         texto TEXT NOT NULL,
         time TEXT NOT NULL
     );
@@ -159,21 +147,17 @@ def init_db():
     with get_db() as db:
         db.executescript(schema)
     
-    # --- Adicionar dados de teste se o DB estiver vazio ---
     try:
         with get_db() as db:
-            # Verificar se já existe um nutri
             cursor = db.execute("SELECT id_nutri FROM nutricionistas LIMIT 1")
             if cursor.fetchone() is None:
                 print("Banco de dados vazio. Criando dados de teste...")
-                # 1. Criar Nutri de Teste
                 id_nutri_teste = 'nutri-teste-01'
                 db.execute(
                     "INSERT OR IGNORE INTO nutricionistas (id_nutri, nome, email, senha, criado_em, bot_persona, bot_restricoes, bot_cor) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                     (id_nutri_teste, 'Dra. Ana Silva', 'nutri@teste.com', '123', datetime.utcnow().isoformat(), 'Uma assistente amigável e motivadora.', 'Nunca dar diagnósticos.', '#3498db')
                 )
                 
-                # 2. Criar Cliente de Teste
                 id_cliente_teste = 'cliente-teste-01'
                 db.execute(
                     """INSERT OR IGNORE INTO clientes (id_cliente, id_nutri, nome, email, senha, idade, sexo, peso_kg, altura_cm, atividade, peso_inicial, criado_em, meta)
@@ -190,9 +174,6 @@ def init_db():
     
     print("Banco de dados SQLite inicializado.")
 
-
-# --- Funções Auxiliares ---
-
 def gerar_id() -> str:
     return str(uuid.uuid4())[:8]
 
@@ -200,8 +181,6 @@ def normalizar_texto(txt: str) -> str:
     if not isinstance(txt, str):
         return ""
     return re.sub(r'\s+', ' ', txt.strip().lower())
-
-# --- Lógica de Nutricionistas e Clientes (Atualizada para SQLite) ---
 
 def criar_nutricionista(nome: str, email: str, senha: str) -> str:
     idn = gerar_id()
@@ -213,7 +192,7 @@ def criar_nutricionista(nome: str, email: str, senha: str) -> str:
             )
         return idn
     except sqlite3.IntegrityError:
-        return None # Email já existe
+        return None 
 
 def criar_cliente(id_nutri: str, nome: str, email: str, senha: str, idade: int, sexo: str, peso_kg: float, altura_cm: float, atividade: str="sedentario") -> str:
     idc = gerar_id()
@@ -226,7 +205,7 @@ def criar_cliente(id_nutri: str, nome: str, email: str, senha: str, idade: int, 
             )
         return idc
     except sqlite3.IntegrityError:
-        return None # Email já existe
+        return None 
     except Exception as e:
         print(f"Erro ao criar cliente: {e}")
         return None
@@ -263,7 +242,6 @@ def get_cliente_por_id(id_cliente: str) -> Optional[Dict[str, Any]]:
         return dict(cliente) if cliente else None
 
 def get_cliente_perfil(id_cliente: str) -> Optional[Dict[str, Any]]:
-    """Busca dados do cliente E nome da nutri para a tela de perfil."""
     with get_db() as db:
         query = """
             SELECT 
@@ -282,7 +260,7 @@ def get_cliente_perfil(id_cliente: str) -> Optional[Dict[str, Any]]:
             return None
             
         perfil_dict = dict(perfil)
-        # Calcular IMC
+        
         if perfil_dict.get("peso_kg") and perfil_dict.get("altura_cm"):
             perfil_dict["imc"] = calcular_imc(perfil_dict["peso_kg"], perfil_dict["altura_cm"])
             perfil_dict["imc_class"] = classificar_imc(perfil_dict["imc"])
@@ -299,17 +277,14 @@ def get_nutri_perfil(id_nutri: str) -> Optional[Dict[str, Any]]:
         return dict(nutri) if nutri else None
 
 def update_nutri_perfil(id_nutri: str, nome: str, email: str, senha: Optional[str] = None) -> bool:
-    """Atualiza o perfil da nutricionista. Só atualiza a senha se ela for fornecida."""
     try:
         with get_db() as db:
             if senha:
-                # Se uma nova senha foi fornecida, atualiza
                 db.execute(
                     "UPDATE nutricionistas SET nome = ?, email = ?, senha = ? WHERE id_nutri = ?",
                     (nome, email, senha, id_nutri)
                 )
             else:
-                # Se a senha for None ou "", não mexe na senha
                 db.execute(
                     "UPDATE nutricionistas SET nome = ?, email = ? WHERE id_nutri = ?",
                     (nome, email, id_nutri)
@@ -323,10 +298,8 @@ def update_nutri_perfil(id_nutri: str, nome: str, email: str, senha: Optional[st
         return False
 
 def delete_cliente(id_cliente: str) -> bool:
-    """Deleta um cliente e todos os seus dados associados."""
     try:
         with get_db() as db:
-            # Usar transação para garantir que tudo seja deletado
             db.execute("BEGIN TRANSACTION")
             db.execute("DELETE FROM clientes WHERE id_cliente = ?", (id_cliente,))
             db.execute("DELETE FROM planos WHERE id_cliente = ?", (id_cliente,))
@@ -337,7 +310,7 @@ def delete_cliente(id_cliente: str) -> bool:
     except Exception as e:
         print(f"Erro ao deletar cliente: {e}")
         with get_db() as db:
-            db.execute("ROLLBACK") # Desfaz a transação em caso de erro
+            db.execute("ROLLBACK") 
         return False
 
 def listar_clientes_por_nutri(id_nutri: str) -> List[Dict[str, Any]]:
@@ -347,7 +320,6 @@ def listar_clientes_por_nutri(id_nutri: str) -> List[Dict[str, Any]]:
         return [dict(c) for c in clientes]
 
 def login_cliente(email: str, senha: str) -> Optional[Dict[str, Any]]:
-    """Ao logar, já busca o nome da nutricionista."""
     with get_db() as db:
         query = """
             SELECT 
@@ -365,8 +337,6 @@ def login_nutri(email: str, senha: str) -> Optional[Dict[str, Any]]:
         cursor = db.execute("SELECT * FROM nutricionistas WHERE email = ? AND senha = ?", (email, senha))
         nutri = cursor.fetchone()
         return dict(nutri) if nutri else None
-
-# --- Lógica de Configuração do Bot ---
 
 def get_bot_config(id_nutri: str) -> Optional[Dict[str, Any]]:
     with get_db() as db:
@@ -386,13 +356,8 @@ def update_bot_config(id_nutri: str, persona: str, restricoes: str, cor: str) ->
         print(f"Erro ao salvar config do bot: {e}")
         return False
 
-# --- Lógica do Plano Alimentar (Atualizada para SQLite) ---
-
 def adicionar_opcao_plano(id_cliente: str, refeicao: str, nome_alimento: str,
                           cal_100g: float, prot_100g: float=0.0, carb_100g: float=0.0, fat_100g: float=0.0) -> bool:
-    """
-    Adiciona opção ao plano. Retorna True se adicionou, False se já existia ou deu erro.
-    """
     if MODELO_IA is None:
         print("Modelo de IA não carregado. Não é possível adicionar embedding.")
         return False
@@ -400,7 +365,6 @@ def adicionar_opcao_plano(id_cliente: str, refeicao: str, nome_alimento: str,
     refeicao_key = refeicao.strip().lower()
     id_item = gerar_id()
     
-    # Gerar embedding
     texto_repr = f"{nome_alimento} - {cal_100g:.0f} kcal por 100g"
     embedding_vec_blob = None
     try:
@@ -436,7 +400,6 @@ def listar_plano(id_cliente: str) -> Dict[str, List[Dict[str,Any]]]:
         if refeicao not in plano_dict:
             plano_dict[refeicao] = []
             
-        # Recriar a estrutura aninhada 'per_100g' que o frontend espera
         item_formatado = {
             "id": item["id_item"],
             "nome": item["nome"],
@@ -452,7 +415,6 @@ def listar_plano(id_cliente: str) -> Dict[str, List[Dict[str,Any]]]:
     return plano_dict
 
 def _encontrar_item_por_nome_por_embedding(id_cliente: str, texto_item: str, limiar: float=0.55) -> Optional[Tuple[str, Dict[str,Any]]]:
-    """Encontra o item mais similar no plano do cliente usando embeddings."""
     if MODELO_IA is None: return None
 
     with get_db() as db:
@@ -473,13 +435,11 @@ def _encontrar_item_por_nome_por_embedding(id_cliente: str, texto_item: str, lim
             continue
             
         try:
-            # Converter BLOB de volta para tensor
             vec = pd.np.frombuffer(vec_blob, dtype=pd.np.float32) 
             sim = float(util.cos_sim(emb_texto, vec))
             
             if sim > melhor_sim:
                 melhor_sim = sim
-                # Formatar o item como a função original esperava
                 item_formatado = {
                     "id": item["id_item"],
                     "nome": item["nome"],
@@ -489,7 +449,7 @@ def _encontrar_item_por_nome_por_embedding(id_cliente: str, texto_item: str, lim
                         "carb": item["carb_100g"],
                         "fat": item["fat_100g"]
                     },
-                    "_embedding_vec": vec # Manter o vetor para uso futuro, se necessário
+                    "_embedding_vec": vec 
                 }
                 melhor_match = (item["refeicao"], item_formatado)
         except Exception as e:
@@ -499,8 +459,6 @@ def _encontrar_item_por_nome_por_embedding(id_cliente: str, texto_item: str, lim
         return melhor_match
         
     return None
-
-# --- Lógica de Cálculos (Sem alteração) ---
 
 def calcular_bmr(peso_kg: float, altura_cm: float, idade: int, sexo: str) -> float:
     s = sexo.lower()[0] if sexo else "f"
@@ -535,8 +493,6 @@ def classificar_imc(imc: float) -> str:
     if imc < 30:
         return "Sobrepeso (IMC 25–29.9)"
     return "Obesidade (IMC ≥ 30)"
-
-# --- Lógica do Chatbot (Atualizada para SQLite) ---
 
 def extrair_itens_e_gramas(frase: str) -> List[Tuple[str, float]]:
     frase = frase.lower()
@@ -584,7 +540,7 @@ def registrar_consumo(id_cliente: str, refeicao: str, nome_item_usuario: str, gr
             kcal = float(m.group(1).replace(",", "."))
             nome_final = nome_item_usuario
         else:
-            kcal = gramas * 1.0 # Fallback
+            kcal = gramas * 1.0 
             nome_final = nome_item_usuario
 
     registro = {
@@ -601,7 +557,7 @@ def registrar_consumo(id_cliente: str, refeicao: str, nome_item_usuario: str, gr
                 "INSERT INTO registros_consumo (id_cliente, data_hora, refeicao, nome_item, gramas, kcal) VALUES (?, ?, ?, ?, ?, ?)",
                 (id_cliente, registro["data_hora"], registro["refeicao"], registro["nome_item"], registro["gramas"], registro["kcal"])
             )
-            # Logar na conversa
+            
             texto_log = f"registrei: {nome_final} {gramas}g no {refeicao}"
             db.execute(
                 "INSERT INTO conversas (id_cliente, role, texto, time) VALUES (?, ?, ?, ?)",
@@ -625,7 +581,6 @@ def consumo_total_hoje(id_cliente: str) -> Tuple[float, List[Dict[str,Any]]]:
     return total, itens
 
 def _salvar_conversa(id_cliente: str, role: str, texto: str):
-    """Função interna para logar conversas no DB."""
     try:
         with get_db() as db:
             db.execute(
@@ -645,8 +600,8 @@ def get_historico_conversa(id_cliente: str) -> List[Dict[str, Any]]:
 
 def saudacoes_cliente(id_cliente: str) -> str:
     cliente = get_cliente_por_id(id_cliente)
-    nome = cliente.get('nome','cliente') if cliente else 'cliente'
-    resposta = f"Olá {nome}! Em que posso te ajudar hoje?"
+    nome = cliente.get('nome','Cliente') if cliente else 'Cliente'
+    resposta = f"Olá, {nome}! 👋 Estou aqui para te ajudar. Sobre o que vamos conversar hoje?"
     _salvar_conversa(id_cliente, "bot", resposta)
     return resposta
 
@@ -656,15 +611,15 @@ def recomendar_opcoes_refeicao(id_cliente: str, refeicao: str) -> str:
     opcoes = plano.get(refeicao_key, [])
     
     if not opcoes:
-        resposta = f"Não há opções cadastradas para '{refeicao_key}'. Peça para sua nutricionista cadastrar."
+        resposta = f"Ainda não tenho opções cadastradas para o seu '<b>{refeicao_key}</b>'. 😕 Você pode me pedir sugestões de outra refeição ou falar com seu/sua nutri para adicionar novas opções!"
     else:
-        linhas = [f"Opções para {refeicao_key} (valores por 100g):"]
+        linhas = [f"Claro! Aqui estão as opções que seu/sua nutri cadastrou para o seu <b>{refeicao_key}</b>:"]
         for it in opcoes:
             p = it["per_100g"]
-            linhas.append(f"- {it['nome']}: {p['cal']:.0f} kcal / 100g; prot {p.get('prot',0)}g; carb {p.get('carb',0)}g; gordura {p.get('fat',0)}g.")
+            linhas.append(f"• <b>{it['nome']}</b>: {p['cal']:.0f} kcal, {p.get('prot',0):.1f}g prot, {p.get('carb',0):.1f}g carb, {p.get('fat',0):.1f}g gord. (por 100g)")
         resposta = "\n".join(linhas)
 
-    _salvar_conversa(id_cliente, "bot", resposta.split('\n')[0]) # Salva só a primeira linha como resumo
+    _salvar_conversa(id_cliente, "bot", resposta.split('\n')[0]) 
     return resposta
 
 def recomendar_para_restante(id_cliente: str, margem_kcal: float = 0.0) -> str:
@@ -679,8 +634,8 @@ def recomendar_para_restante(id_cliente: str, margem_kcal: float = 0.0) -> str:
     consumido, itens = consumo_total_hoje(id_cliente)
     restante = tdee - consumido - margem_kcal
     
-    if restante <= 0:
-        resposta = f"Você já atingiu ou ultrapassou a meta diária (~{tdee:.0f} kcal). Consumido hoje: {consumido:.0f} kcal."
+    if restante <= 50: 
+        resposta = f"Parabéns! 🥳 Você já atingiu sua meta diária de ~{tdee:.0f} kcal (consumido: {consumido:.0f} kcal). Por hoje, o ideal é focar em bebidas sem calorias, como água ou chá."
     else:
         plano = listar_plano(id_cliente)
         candidatos = []
@@ -689,17 +644,17 @@ def recomendar_para_restante(id_cliente: str, margem_kcal: float = 0.0) -> str:
                 cal100 = item["per_100g"].get("cal", 0.0)
                 if cal100 <= 0: continue
                 maxg = (restante / cal100) * 100.0
-                if maxg >= 20:
+                if maxg >= 20: 
                     candidatos.append((item["nome"], cal100, int(maxg), refeicao))
         
         if not candidatos:
-            resposta = f"Nenhuma opção do plano cabe nas ~{restante:.0f} kcal restantes. Considere porções menores."
+            resposta = f"Hmm, pelas minhas contas, restam apenas <b>~{restante:.0f} kcal</b> para hoje. Nenhuma das opções do seu plano se encaixa facilmente nesse valor. Que tal uma porção menor de algo que você já comeu, uma fruta leve ou um chá? 🍵"
         else:
-            candidatos.sort(key=lambda x: -x[2])
-            linhas = [f"Meta estimada: ~{tdee:.0f} kcal. Consumido hoje: {consumido:.0f} kcal. Restam ~{restante:.0f} kcal."]
-            linhas.append("Sugestões que cabem no restante (porção máxima aproximada):")
-            for nome, cal100, maxg, refeicao in candidatos[:10]:
-                linhas.append(f"- {nome} ({refeicao}): {cal100:.0f} kcal/100g — até ~{maxg} g")
+            candidatos.sort(key=lambda x: -x[2]) 
+            linhas = [f"Você ainda tem <b>~{restante:.0f} kcal</b> para hoje (Meta: ~{tdee:.0f} kcal | Consumido: {consumido:.0f} kcal)."]
+            linhas.append("\nCom base no seu plano, aqui estão algumas sugestões e a <b>porção máxima</b> que você pode comer de cada uma para se manter na meta:")
+            for nome, cal100, maxg, refeicao in candidatos[:5]: 
+                linhas.append(f"• <b>{nome}</b> ({refeicao}): Até <b>{maxg}g</b> (~{cal100:.0f} kcal/100g)")
             resposta = "\n".join(linhas)
 
     _salvar_conversa(id_cliente, "bot", resposta.split('\n')[0])
@@ -730,9 +685,8 @@ def ultima_resposta_contexto(id_cliente: str) -> Optional[Dict[str,Any]]:
 def procurar_item_por_texto_no_plano(id_cliente: str, texto: str) -> Optional[Dict[str,Any]]:
     match_emb = _encontrar_item_por_nome_por_embedding(id_cliente, texto)
     if match_emb:
-        return match_emb[1] # Retorna o dicionário do item
+        return match_emb[1] 
 
-    # Fallback para substring
     plano = listar_plano(id_cliente)
     texto_norm = normalizar_texto(texto)
     for refeicao, itens in plano.items():
@@ -746,27 +700,36 @@ def mostrar_informacoes_cliente(id_cliente: str) -> str:
     if not cliente:
         return "Cliente não encontrado."
     
-    bmr = calcular_bmr(cliente["peso_kg"], cliente["altura_cm"], cliente["idade"], cliente["sexo"])
-    tdee = calcular_tdee(bmr, cliente.get("atividade", "sedentario"))
-    agua_ml = recomendacao_agua_ml(cliente["peso_kg"]) if cliente.get("peso_kg") else None
-    consumo_hoje, itens = consumo_total_hoje(id_cliente)
-    
-    linhas = [
-        f"Nome: {cliente['nome']}",
-        f"Idade: {cliente['idade']} | Sexo: {cliente['sexo']}",
-        f"Peso atual: {cliente['peso_kg']} kg | Altura: {cliente['altura_cm']} cm",
-        f"BMR ≈ {bmr:.0f} kcal/dia | TDEE ≈ {tdee:.0f} kcal/dia (atividade: {cliente.get('atividade')})",
-        f"Consumido hoje: {consumo_hoje:.0f} kcal ({len(itens)} registros)",
-    ]
-    if agua_ml:
-        linhas.append(f"Água sugerida: ~{int(agua_ml)} ml/dia (~{agua_ml/1000:.2f} L).")
-    
-    resposta = "\n".join(linhas)
-    # Não salvamos isso como uma resposta de "bot" para não poluir o contexto de perguntas
+    try:
+        peso = cliente.get("peso_kg")
+        altura = cliente.get("altura_cm")
+        idade = cliente.get("idade")
+        
+        bmr = calcular_bmr(peso, altura, idade, cliente.get("sexo", "f"))
+        tdee = calcular_tdee(bmr, cliente.get("atividade", "sedentario"))
+        agua_ml = recomendacao_agua_ml(peso) if peso else None
+        consumo_hoje, itens = consumo_total_hoje(id_cliente)
+        imc = calcular_imc(peso, altura)
+        imc_class = classificar_imc(imc)
+
+        linhas = [
+            f"Aqui está um resumo do seu perfil, {cliente.get('nome', 'Cliente')}:",
+            f"• <b>Peso:</b> {peso} kg (Altura: {altura} cm)",
+            f"• <b>IMC:</b> {imc:.2f} ({imc_class})",
+            f"• <b>Meta Diária:</b> ~{tdee:.0f} kcal",
+            f"• <b>Consumo Hoje:</b> {consumo_hoje:.0f} kcal ({len(itens)} registros)",
+        ]
+        if agua_ml:
+            linhas.append(f"• <b>Água:</b> ~{int(agua_ml)} ml/dia")
+        
+        resposta = "\n".join(linhas)
+    except Exception as e:
+        resposta = "Parece que alguns dos seus dados de perfil (peso, altura, idade) não estão preenchidos. Peça para seu/sua nutri completar seu cadastro! 😉"
+
+    _salvar_conversa(id_cliente, "bot", resposta.split('\n')[0]) 
     return resposta
 
 def gerar_relatorio_completo_cliente(id_cliente: str) -> str:
-    """Gera um relatório completo legível com todas as informações relevantes do cliente."""
     cliente = get_cliente_por_id(id_cliente)
     if not cliente:
         return "Cliente não encontrado."
@@ -777,7 +740,6 @@ def gerar_relatorio_completo_cliente(id_cliente: str) -> str:
     sexo = cliente.get("sexo", "F")
     atividade = cliente.get("atividade", "sedentario")
 
-    # Cálculos
     imc = calcular_imc(peso, altura) if peso and altura else None
     imc_txt = f"{imc:.2f}" if imc else "—"
     imc_class = classificar_imc(imc)
@@ -800,69 +762,64 @@ def gerar_relatorio_completo_cliente(id_cliente: str) -> str:
     
     plano = listar_plano(id_cliente)
     consumo_hoje_total, ultimos_registros = consumo_total_hoje(id_cliente)
-    conversas = get_historico_conversa(id_cliente)[-10:] # Pega as últimas 10
+    conversas = get_historico_conversa(id_cliente)[-10:] 
 
     linhas = [
-        "=== RELATÓRIO COMPLETO DO CLIENTE ===",
-        f"Nome: {cliente.get('nome', '—')}",
-        f"Idade: {idade} | Sexo: {sexo}",
-        f"Peso atual: {peso if peso else '—'} kg | Altura: {altura if altura else '—'} cm",
-        f"Peso inicial: {cliente.get('peso_inicial', '—')} | Meta: {cliente.get('meta', '—')}",
-        f"IMC: {imc_txt} — {imc_class}",
-        f"Água recomendada: {agua_txt}",
-        f"BMR: {bmr_txt} | TDEE: {tdee_txt}",
-        f"Consumido hoje: {consumo_hoje_total:.1f} kcal ({len(ultimos_registros)} registros)"
+        "Aqui está o relatório completo que eu gero para seu/sua nutri (e para você, claro! 😉):",
+        f"\n<b>=== DADOS DO CLIENTE ===</b>",
+        f"• <b>Nome:</b> {cliente.get('nome', '—')}",
+        f"• <b>Idade:</b> {idade} | Sexo: {sexo}",
+        f"• <b>Peso Atual:</b> {peso if peso else '—'} kg | Altura: {altura if altura else '—'} cm",
+        f"• <b>Peso Inicial:</b> {cliente.get('peso_inicial', '—')} | <b>Meta:</b> {cliente.get('meta', '—')}",
+        f"• <b>IMC:</b> {imc_txt} ({imc_class})",
+        f"• <b>Água:</b> {agua_txt}",
+        f"• <b>Metas:</b> BMR: {bmr_txt} | TDEE: {tdee_txt}",
+        f"• <b>Consumo Hoje:</b> {consumo_hoje_total:.1f} kcal ({len(ultimos_registros)} registros)"
     ]
 
-    linhas.append("\n--- Resumo do plano alimentar ---")
+    linhas.append("\n<b>--- PLANO ALIMENTAR ---</b>")
     if not plano:
-        linhas.append("Plano vazio.")
+        linhas.append("• Plano vazio.")
     else:
         for refeicao, itens in plano.items():
-            linhas.append(f"- {refeicao}: {len(itens)} opções")
-            if itens:
-                first = itens[0]
-                p = first.get("per_100g", {})
-                linhas.append(f"  • Exemplo {refeicao}: {first.get('nome')} — {p.get('cal',0)} kcal/100g")
+            linhas.append(f"• <b>{refeicao.upper()}</b>: {len(itens)} opções")
+            for item in itens:
+                p = item.get("per_100g", {})
+                linhas.append(f"    - {item.get('nome')}: {p.get('cal',0):.0f} kcal/100g")
 
-    linhas.append("\n--- Registros de consumo (hoje) ---")
+
+    linhas.append("\n<b>--- REGISTROS DE HOJE ---</b>")
     if not ultimos_registros:
-        linhas.append("Sem registros de consumo hoje.")
+        linhas.append("• Sem registros de consumo hoje.")
     else:
         for r in ultimos_registros:
-            linhas.append(f"* {r.get('data_hora')} | {r.get('refeicao')} | {r.get('nome_item')} {r.get('gramas')}g → {r.get('kcal'):.1f} kcal")
+            linhas.append(f"• {r.get('data_hora')} | {r.get('nome_item')} ({r.get('gramas')}g) → {r.get('kcal'):.0f} kcal")
 
-    linhas.append("\n--- Últimas mensagens (histórico) ---")
+    linhas.append("\n<b>--- ÚLTIMAS MENSAGENS ---</b>")
     if not conversas:
-        linhas.append("Sem histórico de conversas.")
+        linhas.append("• Sem histórico de conversas.")
     else:
         for c in conversas:
-            linhas.append(f"[{c.get('time')}] {c.get('role')}: {c.get('texto')}")
+            linhas.append(f"• [{c.get('time')}] <b>{c.get('role')}</b>: {c.get('texto')}")
 
     return "\n".join(linhas)
 
 
 def responder_pergunta(id_cliente: str, texto: str) -> str:
-    """Função principal do chatbot, agora sem I/O direto."""
-    
-    # Salva a pergunta do usuário no histórico
     _salvar_conversa(id_cliente, "user", texto)
     
     texto_lower = texto.lower().strip()
     
-    # --- Gatilhos e Intenções ---
-    
-    # 1. Gatilhos por Regra Fixa (Regex)
     if re.search(r'(forne(c|ç)a|me dê|me de|me mande|)\s+(todas as informa(c|ç)oes|meu resumo|meu relatório)', texto_lower):
         resposta = gerar_relatorio_completo_cliente(id_cliente)
-        _salvar_conversa(id_cliente, "bot", "Gerando relatório completo...") # Log simples
+        _salvar_conversa(id_cliente, "bot", "Gerando relatório completo...") 
         return resposta
 
     m_peso = re.search(r'\b(?:meu\s+)?peso\s*(?:é|=)?\s*(\d+(?:[.,]\d+)?)\s*(kg)?\b', texto_lower)
     if m_peso:
         peso_novo = float(m_peso.group(1).replace(",", "."))
         if atualizar_cliente(id_cliente, {"peso_kg": peso_novo}):
-            resposta = f"Peso atualizado para {peso_novo:.1f} kg. Agora posso calcular sua água e calorias com esse valor."
+            resposta = f"Entendido! Atualizei seu peso para <b>{peso_novo:.1f} kg</b>. Vou usar esse valor para recalcular suas metas de calorias e água. 👍"
         else:
             resposta = "Erro ao atualizar peso. Peça para a nutricionista atualizar manualmente."
         _salvar_conversa(id_cliente, "bot", resposta)
@@ -872,33 +829,30 @@ def responder_pergunta(id_cliente: str, texto: str) -> str:
         cliente = get_cliente_por_id(id_cliente)
         if cliente and cliente.get("peso_kg"):
             ml = recomendacao_agua_ml(cliente["peso_kg"])
-            resposta = f"Sugestão de ingestão de água: ~{int(ml)} ml/dia (~{ml/1000:.2f} L)."
+            resposta = f"Com base no seu peso, a sugestão de ingestão de água é de <b>~{int(ml)} ml/dia</b> (cerca de {ml/1000:.2f} L). Mantenha-se hidratado! 💧"
         else:
             resposta = "Não tenho seu peso cadastrado. Peça para a nutricionista cadastrar ou escreva 'Meu peso 72kg' para atualizar."
         _salvar_conversa(id_cliente, "bot", resposta)
         return resposta
 
-    # 2. Interpretação por IA (Embeddings)
     chave_intencao, sim = interpretar_intencao(texto_lower)
     
     if chave_intencao == "saudacoes" and sim > 0.5:
-        return saudacoes_cliente(id_cliente) # Função já salva a resposta
+        return saudacoes_cliente(id_cliente) 
     if chave_intencao == "perguntar_opcoes_cafe" and sim > 0.5:
-        return recomendar_opcoes_refeicao(id_cliente, "cafe da manha") # Função já salva a resposta
+        return recomendar_opcoes_refeicao(id_cliente, "cafe da manha") 
     if chave_intencao == "perguntar_opcoes_almoco" and sim > 0.5:
-        return recomendar_opcoes_refeicao(id_cliente, "almoco") # Função já salva a resposta
+        return recomendar_opcoes_refeicao(id_cliente, "almoco") 
     if chave_intencao == "perguntar_opcoes_janta" and sim > 0.5:
-        return recomendar_opcoes_refeicao(id_cliente, "janta") # Função já salva a resposta
+        return recomendar_opcoes_refeicao(id_cliente, "janta") 
     if chave_intencao == "calorias_disponiveis" and sim > 0.5:
-        return recomendar_para_restante(id_cliente) # Função já salva a resposta
+        return recomendar_para_restante(id_cliente) 
     if chave_intencao == "mostrar_info" and sim > 0.5:
         resposta = mostrar_informacoes_cliente(id_cliente)
-        _salvar_conversa(id_cliente, "bot", resposta) # Salva manualmente
         return resposta
 
-    # 3. Registro de Consumo
-    if "comi" in texto_lower or "comemos" in texto_lower or "comeu" in texto_lower:
-        refeicao_encontrada = "refeicao" # default
+    if "comi" in texto_lower or "comemos" in texto_lower or "comeu" in texto_lower or "registrei" in texto_lower or "anota aí" in texto_lower:
+        refeicao_encontrada = "refeicao" 
         for mk in MEAL_KEYS:
             if mk in texto_lower:
                 refeicao_encontrada = mk
@@ -906,19 +860,18 @@ def responder_pergunta(id_cliente: str, texto: str) -> str:
         
         pares = extrair_itens_e_gramas(texto_lower)
         if not pares:
-            resposta = "Não entendi o que você comeu. Exemplos: 'Comi arroz 200g no almoço'."
+            resposta = "Não entendi o que você comeu. 😅 Para eu registrar, tente dizer o alimento e a quantidade, por exemplo: 'Comi 100g de arroz e 150g de frango no almoço'."
         else:
             mensagens = []
             for nome_item, gramas in pares:
                 registro = registrar_consumo(id_cliente, refeicao_encontrada, nome_item, gramas)
                 if registro:
-                    mensagens.append(f"Registrado: {registro['nome_item']} {registro['gramas']}g → {registro['kcal']:.1f} kcal")
+                    mensagens.append(f"Anotado! ✅ <b>{registro['nome_item']}</b> ({registro['gramas']}g) com ~{registro['kcal']:.0f} kcal.")
             resposta = "\n".join(mensagens)
         
         _salvar_conversa(id_cliente, "bot", resposta)
         return resposta
 
-    # 4. Pergunta de Contexto (Calorias)
     if any(k in texto_lower for k in ["quanto isso", "quantas calorias", "quantas kcal", "quanto tem"]):
         ultima = ultima_resposta_contexto(id_cliente)
         if not ultima:
@@ -927,45 +880,38 @@ def responder_pergunta(id_cliente: str, texto: str) -> str:
             texto_bot = ultima.get("texto", "")
             m = re.search(r'(\d+(?:[.,]\d+)?)\s*kcal', texto_bot)
             if m:
-                resposta = f"A resposta anterior indica ~{float(m.group(1))} kcal."
+                resposta = f"A última opção que mencionei tem <b>~{float(m.group(1)):.0f} kcal</b> (a cada 100g, geralmente)."
             else:
                 resposta = "Não consegui inferir as calorias da mensagem anterior."
         
         _salvar_conversa(id_cliente, "bot", resposta)
         return resposta
 
-    # 5. Fallback: Procurar item no plano
     match = procurar_item_por_texto_no_plano(id_cliente, texto_lower)
     if match:
         p = match["per_100g"]
-        resposta = f"{match['nome']}: {p['cal']:.0f} kcal / 100g; prot {p.get('prot',0)}g; carb {p.get('carb',0)}g; gordura {p.get('fat',0)}g."
+        resposta = f"Encontrei <b>{match['nome']}</b> no seu plano! Aqui estão os detalhes (para 100g):\n• <b>Calorias:</b> {p['cal']:.0f} kcal\n• <b>Proteínas:</b> {p.get('prot',0):.1f}g\n• <b>Carboidratos:</b> {p.get('carb',0):.1f}g\n• <b>Gorduras:</b> {p.get('fat',0):.1f}g"
     else:
-        # 6. Resposta Padrão (Não entendeu)
-        resposta = "Desculpe, não entendi. Tente: 'O que eu posso comer?', 'Comi arroz 200g', ou 'Quantas calorias restam?'."
+        resposta = "Desculpe, não consegui entender. 😅 Você pode tentar perguntar de outra forma? Lembre-se que eu funciono melhor com perguntas como 'O que posso jantar?' ou 'Comi 150g de frango'."
     
     _salvar_conversa(id_cliente, "bot", resposta)
     return resposta
 
-# --- Novas Funções para a API ---
-
 def buscar_alimento_base_dados(nome_alimento: str) -> List[Dict[str, Any]]:
-    """Procura alimentos na base de dados (DF_ALIMENTOS) para o nutri."""
     if DF_ALIMENTOS is None:
         return []
 
     nome_alimento = nome_alimento.lower().strip()
     opcoes = DF_ALIMENTOS["descricao_alimento_norm"].tolist()
     
-    # Usar 'extract' para pegar os 5 melhores, não apenas 'extractOne'
     resultados = process.extract(nome_alimento, opcoes, score_cutoff=60, limit=5)
     
     matches = []
     if resultados:
         for melhor, score, idx in resultados:
             alimento = DF_ALIMENTOS.iloc[idx].to_dict()
-            # Limpar NaNs (que não são JSON serializáveis)
             alimento_limpo = {k: (v if pd.notna(v) else None) for k, v in alimento.items()}
-            alimento_limpo['score'] = score # Adiciona o score
+            alimento_limpo['score'] = score 
             matches.append(alimento_limpo)
             
     return matches

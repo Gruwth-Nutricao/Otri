@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let clienteIdAtual = null;
     let timerBuscaAlimento = null;
     
-    // --- 2. Lógica de Navegação (Abas) ---
+
     const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
     const contentSections = document.querySelectorAll('.content-section');
 
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // --- 3. Ações do Dashboard (Botão Cadastrar) ---
+ 
     const newClientBtn = document.querySelector('.btn-primary[data-target="new-client"]');
     if (newClientBtn) {
         newClientBtn.addEventListener('click', function(event) {
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- 4. Carregar Clientes no Dashboard ---
+
     const clientList = document.querySelector('.client-list');
     
     async function carregarClientesDashboard() {
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 clientList.appendChild(li);
             });
             
-            // Atualiza o card de estatísticas
+
             document.querySelector('.stat-card .stat-number').textContent = clientes.length;
 
         } catch (error) {
@@ -101,21 +101,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // --- 5. Tela "Visualizar Chat" / "Gerenciar Cliente" ---
+    
     const chatContainer = document.querySelector('#chat-view .chat-messages');
     const btnConfigBotChat = document.getElementById('btn-config-bot-chat');
     const btnDeleteClient = document.getElementById('btn-delete-client');
     const planoAtualLista = document.getElementById('plano-atual-lista');
 
     function visualizarChatCliente(clienteId, clienteNome) {
-        clienteIdAtual = clienteId; // Salva o ID do cliente atual
+        clienteIdAtual = clienteId; 
         
-        // Ativa a seção de chat
+      
         document.querySelector('.content-section.active').classList.remove('active');
         document.getElementById('chat-view').classList.add('active');
         document.querySelector('#chat-view .section-header h2').textContent = `Gerenciar ${clienteNome}`;
-        
-        // Carrega as duas colunas: Chat e Plano
+   
         carregarHistoricoChat(clienteId);
         carregarPlanoAtual(clienteId);
     }
@@ -139,12 +138,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Botão "Configurar Bot" (atalho)
+
     btnConfigBotChat.addEventListener('click', () => {
         document.querySelector('.nav-item[data-target="bot-config"]').click();
     });
     
-    // Botão "Excluir Cliente"
+
     btnDeleteClient.addEventListener('click', async () => {
         if (!clienteIdAtual) return;
         
@@ -164,7 +163,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // --- 6. Tela "Cadastrar Novo Cliente" (Formulário Completo) ---
     const newClientForm = document.getElementById('form-new-client');
     newClientForm.addEventListener('submit', async function(event) {
         event.preventDefault(); 
@@ -209,7 +207,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // --- 7. Perfil da Nutri (Carregar e Salvar) ---
     const perfilForm = document.getElementById('form-profile-nutri');
     
     async function carregarNutriPerfil() {
@@ -234,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const senha = document.getElementById('senha-perfil').value;
         
         const data = { nome, email };
-        if (senha) { // Só envia a senha se ela não estiver em branco
+        if (senha) { 
             data.senha = senha;
         }
 
@@ -250,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             const perfilAtualizado = await response.json();
             
-            // Atualiza o nome na barra lateral
+
             localStorage.setItem('nome_nutri', perfilAtualizado.nome);
             document.querySelector('.sidebar-profile span').textContent = `Dr(a). ${perfilAtualizado.nome}`;
             
@@ -261,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // --- 8. Configuração do Bot (Carregar e Salvar) ---
+
     const botConfigForm = document.getElementById('form-bot-config');
     const colorBoxes = document.querySelectorAll('.color-box');
     
@@ -313,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // --- 9. Tela de Debug ---
+
     const debugSelect = document.querySelector('.debug-container .client-select');
     const debugInput = document.querySelector('.debug-container .debug-input');
     const debugButton = document.querySelector('.debug-container .btn-primary-form');
@@ -360,12 +357,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // --- 10. Gerenciador de Plano (Busca e Adição) ---
+    
     const inputBuscaAlimento = document.getElementById('input-busca-alimento');
     const buscaResultados = document.getElementById('busca-resultados');
     const selectRefeicao = document.getElementById('select-refeicao');
 
-    // Busca de Alimentos (com delay para não sobrecarregar)
+   
     inputBuscaAlimento.addEventListener('keyup', () => {
         clearTimeout(timerBuscaAlimento);
         const query = inputBuscaAlimento.value;
@@ -389,7 +386,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alimentos.forEach(alimento => {
                     const div = document.createElement('div');
                     div.textContent = `${alimento.descricao_alimento} (${alimento.energia_kcal.toFixed(0)} kcal/100g)`;
-                    // Armazena todos os dados do alimento no próprio elemento
+                   
                     div.dataset.alimento = JSON.stringify(alimento); 
                     div.addEventListener('click', () => adicionarAlimentoAoPlano(alimento));
                     buscaResultados.appendChild(div);
@@ -398,10 +395,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error("Erro na busca:", error);
                 buscaResultados.innerHTML = '<div>Erro ao buscar.</div>';
             }
-        }, 500); // 500ms de delay
+        }, 500); 
     });
 
-    // Função para adicionar o alimento clicado
+    
     async function adicionarAlimentoAoPlano(alimento) {
         if (!clienteIdAtual) return;
         
@@ -427,17 +424,17 @@ document.addEventListener('DOMContentLoaded', function() {
                  throw new Error(err.detail || 'Falha ao adicionar');
             }
             
-            // Limpa a busca e atualiza a lista do plano
+            
             inputBuscaAlimento.value = '';
             buscaResultados.innerHTML = '';
-            carregarPlanoAtual(clienteIdAtual); // Recarrega o plano
+            carregarPlanoAtual(clienteIdAtual); 
             
         } catch (error) {
             alert(`Erro: ${error.message}`);
         }
     }
 
-    // Função para carregar o plano na coluna da direita
+    
     async function carregarPlanoAtual(clienteId) {
         planoAtualLista.innerHTML = '<li>Carregando plano...</li>';
         try {
@@ -462,6 +459,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // --- Carregamento Inicial ---
+    
     carregarClientesDashboard();
 });

@@ -1,3 +1,4 @@
+
 import chatbot_nutri as bot 
 from fastapi import FastAPI, HTTPException, Depends, APIRouter
 from pydantic import BaseModel
@@ -7,7 +8,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 
-# --- Modelos de Dados (Pydantic) ---
 class ChatMessage(BaseModel):
     texto: str
 
@@ -45,9 +45,7 @@ class BotConfigRequest(BaseModel):
 class NutriPerfilRequest(BaseModel):
     nome: str
     email: str
-    senha: Optional[str] = None # Senha é opcional na atualização
-
-# --- Gerenciador de Vida da Aplicação (Carregar Modelos) ---
+    senha: Optional[str] = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -58,8 +56,6 @@ async def lifespan(app: FastAPI):
     yield
     print("Encerrando API.")
 
-# --- Inicialização da API ---
-
 app = FastAPI(
     title="OTRI/Gruwth API",
     description="API para o backend do chatbot de nutrição.",
@@ -67,7 +63,6 @@ app = FastAPI(
     lifespan=lifespan 
 )
 
-# --- Adicionar Middleware CORS ---
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
@@ -76,7 +71,6 @@ app.add_middleware(
     allow_headers=["*"], 
 )
 
-# --- Endpoints da API (prefixados com /api) ---
 api_router = APIRouter() 
 
 @api_router.post("/login/cliente")
@@ -106,7 +100,6 @@ async def get_chat_historico(id_cliente: str):
 
 @api_router.get("/clientes/{id_cliente}/perfil")
 async def get_perfil_cliente(id_cliente: str):
-    """Pega os dados para a tela 'Meu Perfil' E 'Info Nutri' do cliente."""
     perfil = bot.get_cliente_perfil(id_cliente)
     if not perfil:
         raise HTTPException(status_code=404, detail="Perfil do cliente não encontrado")
@@ -114,7 +107,6 @@ async def get_perfil_cliente(id_cliente: str):
 
 @api_router.delete("/clientes/{id_cliente}")
 async def delete_cliente(id_cliente: str):
-    """Deleta um cliente e todos os seus dados."""
     sucesso = bot.delete_cliente(id_cliente)
     if not sucesso:
         raise HTTPException(status_code=500, detail="Erro ao deletar cliente do banco de dados.")
@@ -122,17 +114,14 @@ async def delete_cliente(id_cliente: str):
 
 @api_router.get("/planos/{id_cliente}")
 async def get_plano_cliente(id_cliente: str):
-    """Pega o plano alimentar para a tela 'Plano Nutricional'."""
     return bot.listar_plano(id_cliente)
 
 @api_router.get("/nutricionistas/{id_nutri}/clientes")
 async def get_lista_clientes(id_nutri: str):
-    """Popula a lista de clientes no dashboard do nutricionista."""
     return bot.listar_clientes_por_nutri(id_nutri)
 
 @api_router.get("/nutricionistas/{id_nutri}/perfil")
 async def get_perfil_nutri(id_nutri: str):
-    """Pega os dados para a tela 'Meu Perfil' do nutricionista."""
     perfil = bot.get_nutri_perfil(id_nutri)
     if not perfil:
         raise HTTPException(status_code=404, detail="Perfil do nutricionista não encontrado")
@@ -140,8 +129,6 @@ async def get_perfil_nutri(id_nutri: str):
 
 @api_router.put("/nutricionistas/{id_nutri}/perfil")
 async def put_perfil_nutri(id_nutri: str, request: NutriPerfilRequest):
-    """Atualiza o perfil da nutricionista."""
-    # Opcional: validar se a senha, se fornecida, é forte
     senha_para_salvar = request.senha if request.senha else None
     
     sucesso = bot.update_nutri_perfil(id_nutri, request.nome, request.email, senha_para_salvar)
@@ -165,7 +152,6 @@ async def post_config_bot(id_nutri: str, config: BotConfigRequest):
 
 @api_router.post("/clientes", status_code=201)
 async def criar_novo_cliente(request: ClienteRequest):
-    """Cria um novo cliente a partir do formulário do nutricionista."""
     idc = bot.criar_cliente(
         id_nutri=request.id_nutri,
         nome=request.nome,
@@ -203,15 +189,14 @@ async def adicionar_item_plano(id_cliente: str, item: OpcaoPlanoRequest):
         raise HTTPException(status_code=400, detail="Falha ao adicionar item. Talvez já exista.")
     return {"status": "sucesso", "id_cliente": id_cliente, "item_nome": item.nome_alimento}
 
-# --- Montar a API e os Arquivos Estáticos ---
 app.include_router(api_router, prefix="/api")
 
-# Servir os arquivos estáticos (HTML, CSS, JS)
 app.mount("/Acesso_Cliente", StaticFiles(directory="Acesso_Cliente", html=True), name="cliente_app")
 app.mount("/Acesso_Nutricionista", StaticFiles(directory="Acesso_Nutricionista", html=True), name="nutri_app")
 app.mount("/Main", StaticFiles(directory="Main", html=True), name="main_app")
+app.mount("/Whatsapp_Sim", StaticFiles(directory="Whatsapp_Sim", html=True), name="whatsapp_app")
+
 
 @app.get("/")
 async def get_root():
-    # Redireciona a raiz (/) para a home page
     return RedirectResponse(url="/Main/home.html")

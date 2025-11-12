@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function() {
     
     // --- 1. Verificação de Login ---
@@ -19,6 +20,21 @@ document.addEventListener('DOMContentLoaded', function() {
     if (infoNutriH3) {
         infoNutriH3.textContent = `Dr(a). ${NOME_NUTRI}`;
     }
+    
+    // --- LÓGICA DO BOTÃO WHATSAPP ADICIONADA AQUI ---
+    const whatsappLink = document.getElementById('whatsapp-sim-link');
+    if (whatsappLink) {
+        // Define o link para a simulação, passando o ID do cliente na URL
+        whatsappLink.href = `../Whatsapp_Sim/chat.html?cliente=${ID_CLIENTE_LOGADO}`;
+        // Faz abrir em uma nova aba
+        whatsappLink.target = "_blank";
+        
+        // Remove o comportamento de "aba" do dashboard
+        whatsappLink.addEventListener('click', function(event) {
+            event.stopPropagation(); // Impede que o listener de navegação de abas seja acionado
+        });
+    }
+    // --- FIM DA ADIÇÃO ---
 
 
     // --- 3. Lógica de Navegação (Abas) ---
@@ -26,6 +42,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const contentSections = document.querySelectorAll('.content-section');
 
     navItems.forEach(item => {
+        // Ignora o link do whatsapp da lógica de abas
+        if (item.id === 'whatsapp-sim-link') {
+            return;
+        }
+
         item.addEventListener('click', function(event) {
             event.preventDefault();
             const targetId = this.getAttribute('data-target');

@@ -1,3 +1,4 @@
+python -m venv venv ( se ainda nao tiver criado )
 .\venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn api:app --reload
